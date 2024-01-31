@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 
 export class UpdateBookDto extends PartialType(CreateBookDto) {
-  @IsNotEmpty({ message: 'Book id must be present' })
+  @IsNotEmpty({ message: 'id must be present' })
   @IsNumber()
   id: number;
 

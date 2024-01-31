@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateBookDto } from './dto/book/create-book.dto';
 import { UpdateBookDto } from './dto/book/update-book.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,58 +13,56 @@ export class BooksService {
       const newBook = this.bookRepo.create(createBookDto);
       return await this.bookRepo.save(newBook);
     } catch (error) {
-      throw new BadRequestException(error, {
-        description: 'Sorry, something went wrong.',
-      });
+      throw new HttpException(
+        'Something went wrong.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
-  findAll() {
+  async findAll() {
     try {
-      const books = this.bookRepo.find();
+      const books = await this.bookRepo.find();
       return books;
     } catch (error) {
-      throw new NotFoundException(error, {
-        description: 'Sorry, we coulod not find any books',
-      });
+      throw new HttpException(
+        'Something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
-  findOne(id: number) {
-    try {
-      const book = this.bookRepo.findOne({
-        where: {
-          id: id,
-        },
-      });
-      return book;
-    } catch (error) {
-      throw new NotFoundException(error, {
-        description: 'Sorry, we could not find that book',
-      });
+  async findOne(id: number) {
+    const book = await this.bookRepo.findOneBy({
+      id: id,
+    });
+
+    if (!book) {
+      throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
     }
+
+    return book;
   }
 
-  update(id: number, updateBookDto: UpdateBookDto) {
-    try {
-      const updatedBook = this.bookRepo.update(id, updateBookDto);
-      return updatedBook;
-    } catch (error) {
-      throw new BadRequestException(error, {
-        description: 'Sorry, something went wrong',
-      });
+  async update(id: number, updateBookDto: UpdateBookDto) {
+    const existingBook = await this.bookRepo.findOne({ where: { id } });
+
+    if (!existingBook) {
+      throw new HttpException('Book Not Found', HttpStatus.NOT_FOUND);
     }
+    const updatedBook = await this.bookRepo.update(id, updateBookDto);
+    return updatedBook;
   }
 
-  remove(id: number) {
-    try {
-      const deletedBook = this.findOne(id);
-      this.bookRepo.delete(id);
-      return deletedBook;
-    } catch (error) {
-      throw new BadRequestException(error, {
-        description: 'Sorry, something went wrong',
-      });
+  async remove(id: number) {
+    const deletedBook = await this.bookRepo.findOneBy({
+      id,
+    });
+
+    if (!deletedBook) {
+      throw new HttpException('Book Not Found', HttpStatus.NOT_FOUND);
     }
+    await this.bookRepo.delete(id);
+    return deletedBook;
   }
 }
