@@ -28,7 +28,7 @@ export class CreateBookDto {
   averageRating: number;
 
   @IsNotEmpty({ message: 'Book must have an ISBN' })
-  @IsNumber()
+  @IsString()
   ISBN: string;
 
   @IsNotEmpty({ message: 'Book must have a publisher' })

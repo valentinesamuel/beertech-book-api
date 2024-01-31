@@ -50,8 +50,10 @@ export class BooksService {
     if (!existingBook) {
       throw new HttpException('Book Not Found', HttpStatus.NOT_FOUND);
     }
-    const updatedBook = await this.bookRepo.update(id, updateBookDto);
-    return updatedBook;
+
+    this.checkEntityId(id, existingBook);
+    await this.bookRepo.update(id, updateBookDto);
+    return this.findOne(id);
   }
 
   async remove(id: number) {
@@ -64,5 +66,11 @@ export class BooksService {
     }
     await this.bookRepo.delete(id);
     return deletedBook;
+  }
+
+  private checkEntityId(id: number, existingBook: Book) {
+    if (+id !== existingBook.id) {
+      throw new HttpException('Book ID does not match', HttpStatus.BAD_REQUEST);
+    }
   }
 }

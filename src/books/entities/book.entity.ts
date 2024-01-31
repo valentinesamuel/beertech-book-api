@@ -25,4 +25,13 @@ export class Book {
 
   @Column({ nullable: false })
   summary: string;
+
+  @Column({ nullable: false })
+  averageRating: number;
+
+  @Column('simple-array', { nullable: false })
+  genres: string[];
+
+  @Column('simple-array', { nullable: false })
+  reviews: string[];
 }
