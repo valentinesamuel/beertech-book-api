@@ -1,26 +1,74 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateBookDto } from './dto/book/create-book.dto';
 import { UpdateBookDto } from './dto/book/update-book.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Book } from './entities/book.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BooksService {
-  create(createBookDto: CreateBookDto) {
-    return 'This action adds a new book';
+  constructor(@InjectRepository(Book) private bookRepo: Repository<Book>) {}
+  async create(createBookDto: CreateBookDto) {
+    try {
+      const newBook = this.bookRepo.create(createBookDto);
+      return await this.bookRepo.save(newBook);
+    } catch (error) {
+      throw new BadRequestException(error, {
+        description: 'Sorry, something went wrong.',
+      });
+    }
   }
 
   findAll() {
-    return `This action returns all books`;
+    try {
+      const books = this.bookRepo.find();
+      return books;
+    } catch (error) {
+      throw new NotFoundException(error, {
+        description: 'Sorry, we coulod not find any books',
+      });
+    }
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} book`;
+    try {
+      const book = this.bookRepo.findOne({
+        where: {
+          id: id,
+        },
+      });
+      return book;
+    } catch (error) {
+      throw new NotFoundException(error, {
+        description: 'Sorry, we could not find that book',
+      });
+    }
   }
 
   update(id: number, updateBookDto: UpdateBookDto) {
-    return `This action updates a #${id} book`;
+    try {
+      const updatedBook = this.bookRepo.update(id, updateBookDto);
+      return updatedBook;
+    } catch (error) {
+      throw new BadRequestException(error, {
+        description: 'Sorry, something went wrong',
+      });
+    }
   }
 
   remove(id: number) {
-    return `This action removes a #${id} book`;
+    try {
+      const deletedBook = this.findOne(id);
+      this.bookRepo.delete(id);
+      return deletedBook;
+    } catch (error) {
+      throw new BadRequestException(error, {
+        description: 'Sorry, something went wrong',
+      });
+    }
   }
 }

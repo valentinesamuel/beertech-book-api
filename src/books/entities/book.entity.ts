@@ -1,29 +1,28 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Author } from './author.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Book {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column({ unique: true, nullable: false })
   title: string;
 
-  @ManyToMany(() => Author, (author) => author.books, {
-    cascade: true,
-    // cascade: ['insert', 'update'],
-  })
-  authors: Author[];
+  @Column('simple-array', { nullable: false })
+  authors: string[];
 
   @Column({ nullable: false, unique: true })
   ISBN: string;
 
-  @Column({ nullable: false, unique: true })
+  @Column('simple-array', { nullable: false })
+  publishers: string[];
+
+  @Column({ nullable: false })
   quantityAvailable: number;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false })
   price: number;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false })
   summary: string;
 }

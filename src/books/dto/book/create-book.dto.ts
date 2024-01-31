@@ -1,4 +1,10 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateBookDto {
   @IsNotEmpty({ message: 'Book must have a title' })
@@ -7,24 +13,42 @@ export class CreateBookDto {
 
   @IsNotEmpty({ message: 'Book must have an author' })
   @IsArray()
-  authors: TAuthor[];
+  authors: string[];
 
   @IsNotEmpty({ message: 'Book must have a quantity available' })
-  @IsNotEmpty({ message: 'Field name must be added' })
-  @IsString()
+  @IsNumber()
   quantityAvailable: number;
 
+  @IsNotEmpty({ message: 'Book must have a price' })
+  @IsNumber()
   price: number;
 
+  @IsNotEmpty({ message: 'Book must have a price' })
+  @IsNumber({ maxDecimalPlaces: 1 })
   averageRating: number;
 
+  @IsNotEmpty({ message: 'Book must have an ISBN' })
+  @IsNumber()
   ISBN: string;
 
-  publishers: TPublisher[];
+  @IsNotEmpty({ message: 'Book must have a publisher' })
+  @IsArray()
+  publishers: string[];
 
-  genres: TGenre[];
+  @IsNotEmpty({ message: 'Book must have at leaast one genre' })
+  @IsArray()
+  genres: string[];
 
-  reviews: TReview[];
+  @IsOptional()
+  @IsArray()
+  reviews: string[];
 
+  @IsNotEmpty({ message: 'Book must have a summary' })
+  @IsString()
   summary: string;
+
+  constructor(bookDTO?: Partial<CreateBookDto>) {
+    Object.assign(this, bookDTO);
+    this.averageRating = this.averageRating || 0.0;
+  }
 }
