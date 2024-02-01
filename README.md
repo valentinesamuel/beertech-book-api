@@ -290,7 +290,7 @@ List and document each API endpoint, including request and response formats.
 ## Documentation
 
 PDF Documentation for this project can be found [here](https://d.com)
-Architectural Diagram for this project can be found [here](https://d.com)
+
 Postman Collection for this project can be found [here](https://d.com)
 
 ## Testing
