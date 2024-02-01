@@ -7,11 +7,6 @@ import { Book } from './entities/book.entity';
 describe('BooksController', () => {
   let controller: BooksController;
 
-  // const responseMock = {
-  //   status: jest.fn(() => responseMock),
-  //   json: jest.fn(() => responseMock),
-  // };
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [BooksController],
@@ -42,7 +37,7 @@ describe('BooksController', () => {
                   },
                 ] as Book[],
                 page: expect.any(Number),
-                pageSize: expect.any(Number),
+                limit: expect.any(Number),
                 totalCount: expect.any(Number),
               };
             }),
@@ -154,7 +149,7 @@ describe('BooksController', () => {
           },
         ] as Book[],
         page: expect.any(Number),
-        pageSize: expect.any(Number),
+        limit: expect.any(Number),
         totalCount: expect.any(Number),
       };
 

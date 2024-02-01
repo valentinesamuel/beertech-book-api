@@ -68,38 +68,84 @@ List and document each API endpoint, including request and response formats.
 
 ### Example:
 
-#### `GET /books`
+#### `GET /books?limit=5&offset=10`
 
 - **Description:** Get a list of all books.
 - **Request:**
-  ```json
-  {
-    "title": "Educated",
-    "authors": ["Tara Westover"],
-    "ISBN": "978-0-399-59050-4",
-    "publishers": ["Random House"],
-    "quantityAvailable": 18,
-    "price": 20.99,
-    "summary": "A memoir recounting a woman's journey from a survivalist family to Cambridge University.",
-    "averageRating": 4.9,
-    "genres": ["Non-Fiction", "Memoir"],
-    "reviews": ["Compelling life story!", "Inspiring."]
-  }
-  ```
+  This enpoint does not require a request body.
 - **Response:**
   ```json
   {
-    "id": 1,
-    "title": "Educated",
-    "authors": ["Tara Westover"],
-    "ISBN": "978-0-399-59050-4",
-    "publishers": ["Random House"],
-    "quantityAvailable": 18,
-    "price": 20.99,
-    "summary": "A memoir recounting a woman's journey from a survivalist family to Cambridge University.",
-    "averageRating": 4.9,
-    "genres": ["Non-Fiction", "Memoir"],
-    "reviews": ["Compelling life story!", "Inspiring."]
+    "data": [
+      {
+        "id": 1,
+        "title": "Sample Book Title",
+        "authors": ["Author One", "Author Two"],
+        "ISBN": "978-1-234-56789-0",
+        "publishers": ["Publisher One", "Publisher Two"],
+        "quantityAvailable": 10,
+        "price": 29,
+        "summary": "This is a sample book summary.",
+        "averageRating": 4,
+        "genres": ["Fiction", "Mystery"],
+        "reviews": ["Great book!", "Highly recommended."]
+      },
+      {
+        "id": 2,
+        "title": "The Great Gatsby",
+        "authors": ["F. Scott Fitzgerald"],
+        "ISBN": "978-0-7432-7356-5",
+        "publishers": ["Scribner"],
+        "quantityAvailable": 15,
+        "price": 12,
+        "summary": "A classic novel depicting the American Dream during the Roaring Twenties.",
+        "averageRating": 4,
+        "genres": ["Fiction", "Classic"],
+        "reviews": ["Timeless masterpiece!", "Captivating narrative."]
+      },
+      {
+        "id": 3,
+        "title": "To Kill a Mockingbird",
+        "authors": ["Harper Lee"],
+        "ISBN": "978-0-06-112008-4",
+        "publishers": ["J.B. Lippincott & Co."],
+        "quantityAvailable": 20,
+        "price": 14,
+        "summary": "A powerful story addressing racial injustice in the American South.",
+        "averageRating": 4,
+        "genres": ["Fiction", "Drama"],
+        "reviews": ["Must-read!", "Impactful storytelling."]
+      },
+      {
+        "id": 4,
+        "title": "1984",
+        "authors": ["George Orwell"],
+        "ISBN": "978-0-452-28423-4",
+        "publishers": ["Secker & Warburg"],
+        "quantityAvailable": 18,
+        "price": 11,
+        "summary": "A dystopian novel exploring themes of totalitarianism and surveillance.",
+        "averageRating": 4,
+        "genres": ["Fiction", "Science Fiction"],
+        "reviews": ["Thought-provoking!", "Eerily relevant."]
+      },
+      {
+        "id": 5,
+        "title": "The Catcher in the Rye",
+        "authors": ["J.D. Salinger"],
+        "ISBN": "978-0-316-76948-0",
+        "publishers": ["Little", " Brown and Company"],
+        "quantityAvailable": 12,
+        "price": 10,
+        "summary": "A classic novel exploring teenage angst and alienation.",
+        "averageRating": 4,
+        "genres": ["Fiction", "Coming-of-Age"],
+        "reviews": ["Iconic narrative!", "Relatable characters."]
+      }
+    ],
+    "page": 1,
+    "limit": "5",
+    "totalCount": 23
   }
   ```
 - **Status**: 200 OK
@@ -210,6 +256,7 @@ List and document each API endpoint, including request and response formats.
 - **Request:**
   ```json
   {
+    "id": 1,
     "title": "Educated",
     "authors": ["Tara Westover"],
     "ISBN": "978-0-399-59050-4",

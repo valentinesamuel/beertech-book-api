@@ -24,14 +24,11 @@ export class BooksController {
   @Get()
   async findAll(
     @Query('page') page: number = 1,
-    @Query('pageSize') pageSize: number = 10,
+    @Query('limit') limit: number = 10,
   ) {
-    const { data, totalCount } = await this.booksService.findAll({
-      page,
-      pageSize,
-    });
+    const { data, totalCount } = await this.booksService.findAll(+page, +limit);
 
-    return { data, page, pageSize, totalCount };
+    return { data, page, limit, totalCount };
   }
 
   @Get(':id')
