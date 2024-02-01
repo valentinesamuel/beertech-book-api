@@ -289,7 +289,8 @@ List and document each API endpoint, including request and response formats.
 
 ## Documentation
 
-PDF Documentation for this project can be found [here](https://d.com)
+
+PDF Documentation for this project can be found here at [Beertech API Documentation.pdf](https://github.com/valentinesamuel/beertech-book-api/files/14127480/Beertech.API.Documentation.pdf)
 
 Postman Collection for this project can be found below: <br/> <br/>
 [<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://god.gw.postman.com/run-collection/14004903-dd7299ff-3138-494d-8b81-c57f0e76e31f?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D14004903-dd7299ff-3138-494d-8b81-c57f0e76e31f%26entityType%3Dcollection%26workspaceId%3D0334c4de-8dd2-4f1d-b6cc-2b037260f6a7)
