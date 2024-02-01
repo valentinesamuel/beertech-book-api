@@ -12,7 +12,7 @@ import { SeederModule } from './seeder/seeder.module';
       type: 'sqlite',
       database: 'db/seed.sqlite',
       // database: 'db/sql',
-      // synchronize: true,
+      synchronize: true,
       entities: [Book],
     }),
     BooksModule,
