@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/book/create-book.dto';
@@ -21,8 +22,16 @@ export class BooksController {
   }
 
   @Get()
-  findAll() {
-    return this.booksService.findAll();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('pageSize') pageSize: number = 10,
+  ) {
+    const { data, totalCount } = await this.booksService.findAll({
+      page,
+      pageSize,
+    });
+
+    return { data, page, pageSize, totalCount };
   }
 
   @Get(':id')

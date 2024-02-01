@@ -24,21 +24,27 @@ describe('BooksController', () => {
               return { id: 1, ...dto };
             }),
             findAll: jest.fn(() => {
-              return [
-                {
-                  title: 'The Night Circus',
-                  authors: ['Erin Morgenstern'],
-                  ISBN: '978-0-385-53463-5',
-                  publishers: ['Doubleday'],
-                  quantityAvailable: 19,
-                  price: 21.99,
-                  summary:
-                    'A magical novel about a mysterious competition between two illusionists.',
-                  averageRating: 4.7,
-                  genres: ['Fiction', 'Fantasy'],
-                  reviews: ['Enchanting tale!', 'Immersive and whimsical.'],
-                },
-              ] as CreateBookDto[];
+              return {
+                data: [
+                  {
+                    id: expect.any(Number),
+                    title: 'The Night Circus',
+                    authors: ['Erin Morgenstern'],
+                    ISBN: '978-0-385-53463-5',
+                    publishers: ['Doubleday'],
+                    quantityAvailable: 19,
+                    price: 21.99,
+                    summary:
+                      'A magical novel about a mysterious competition between two illusionists.',
+                    averageRating: 4.7,
+                    genres: ['Fiction', 'Fantasy'],
+                    reviews: ['Enchanting tale!', 'Immersive and whimsical.'],
+                  },
+                ] as Book[],
+                page: expect.any(Number),
+                pageSize: expect.any(Number),
+                totalCount: expect.any(Number),
+              };
             }),
             findOne: jest.fn((id) => {
               return {
@@ -129,26 +135,34 @@ describe('BooksController', () => {
   });
 
   describe('findAllBooks', () => {
-    it('should return an array of books', () => {
-      // Define the expected type for the return value
-      const expectedValue: CreateBookDto[] = [
-        {
-          title: 'The Night Circus',
-          authors: ['Erin Morgenstern'],
-          ISBN: '978-0-385-53463-5',
-          publishers: ['Doubleday'],
-          quantityAvailable: 19,
-          price: 21.99,
-          summary:
-            'A magical novel about a mysterious competition between two illusionists.',
-          averageRating: 4.7,
-          genres: ['Fiction', 'Fantasy'],
-          reviews: ['Enchanting tale!', 'Immersive and whimsical.'],
-        },
-      ];
+    it('should return an array of books', async () => {
+      const expectedValue = {
+        data: [
+          {
+            id: expect.any(Number),
+            title: 'The Night Circus',
+            authors: ['Erin Morgenstern'],
+            ISBN: '978-0-385-53463-5',
+            publishers: ['Doubleday'],
+            quantityAvailable: 19,
+            price: 21.99,
+            summary:
+              'A magical novel about a mysterious competition between two illusionists.',
+            averageRating: 4.7,
+            genres: ['Fiction', 'Fantasy'],
+            reviews: ['Enchanting tale!', 'Immersive and whimsical.'],
+          },
+        ] as Book[],
+        page: expect.any(Number),
+        pageSize: expect.any(Number),
+        totalCount: expect.any(Number),
+      };
 
-      const actualValue = controller.findAll();
-      expect(actualValue).toEqual(expect.arrayContaining(expectedValue));
+      const actualValue = controller.findAll(
+        expect.any(Number),
+        expect.any(Number),
+      );
+      expect(actualValue).toEqual(Promise.resolve(expectedValue));
     });
   });
 

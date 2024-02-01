@@ -20,10 +20,19 @@ export class BooksService {
     }
   }
 
-  async findAll() {
+  async findAll({ page, pageSize }) {
     try {
-      const books = await this.bookRepo.find();
-      return books;
+      const skip = (page - 1) * pageSize;
+      const take = pageSize;
+      const [data, totalCount] = await Promise.all([
+        this.bookRepo.find({
+          skip,
+          take,
+        }),
+        this.bookRepo.count(),
+      ]);
+
+      return { data, page, pageSize, totalCount };
     } catch (error) {
       throw new HttpException(
         'Something went wrong',
