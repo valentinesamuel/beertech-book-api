@@ -17,8 +17,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  const seeder = app.get(SeederService);
-  await seeder.seedBooks();
+  // const seeder = app.get(SeederService);
+  // await seeder.seedBooks();
 
   await app.listen(3000);
 }
