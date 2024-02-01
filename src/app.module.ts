@@ -11,8 +11,7 @@ import { SeederModule } from './seeder/seeder.module';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db/seed.sqlite',
-      // database: 'db/sql',
-      synchronize: true,
+      // synchronize: true,
       entities: [Book],
     }),
     BooksModule,
