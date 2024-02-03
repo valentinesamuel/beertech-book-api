@@ -20,21 +20,27 @@ describe('BooksService', () => {
               return { id: 1, ...dto };
             }),
             findAll: jest.fn(() => {
-              return [
-                {
-                  title: 'The Night Circus',
-                  authors: ['Erin Morgenstern'],
-                  ISBN: '978-0-385-53463-5',
-                  publishers: ['Doubleday'],
-                  quantityAvailable: 19,
-                  price: 21.99,
-                  summary:
-                    'A magical novel about a mysterious competition between two illusionists.',
-                  averageRating: 4.7,
-                  genres: ['Fiction', 'Fantasy'],
-                  reviews: ['Enchanting tale!', 'Immersive and whimsical.'],
-                },
-              ] as CreateBookDto[];
+              return {
+                data: [
+                  {
+                    id: expect.any(Number),
+                    title: 'The Night Circus',
+                    authors: ['Erin Morgenstern'],
+                    ISBN: '978-0-385-53463-5',
+                    publishers: ['Doubleday'],
+                    quantityAvailable: 19,
+                    price: 21.99,
+                    summary:
+                      'A magical novel about a mysterious competition between two illusionists.',
+                    averageRating: 4.7,
+                    genres: ['Fiction', 'Fantasy'],
+                    reviews: ['Enchanting tale!', 'Immersive and whimsical.'],
+                  },
+                ] as Book[],
+                page: expect.any(Number),
+                limit: expect.any(Number),
+                totalCount: expect.any(Number),
+              };
             }),
             findOne: jest.fn((id) => {
               return {
@@ -102,7 +108,7 @@ describe('BooksService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('createBook', () => {
+  describe('Create a Book', () => {
     it('should create a book', async () => {
       const book = {
         id: 1,
@@ -132,8 +138,86 @@ describe('BooksService', () => {
           expect.objectContaining({ id: 1, ...book }),
         );
       } catch (error) {
-        // console.error(error);
-        // write an expect that throws an HTTP Exception error with custome message
+        expect(error).toBeInstanceOf(HttpException);
+        expect(error.message).toBe('Something went wrong');
+      }
+    });
+  });
+
+  describe('Find all Books', () => {
+    it('should return all books in the database as well as a page, limit and total number of books in the database', async () => {
+      const expectedBooks = {
+        data: [
+          {
+            id: expect.any(Number),
+            title: 'The Night Circus',
+            authors: ['Erin Morgenstern'],
+            ISBN: '978-0-385-53463-5',
+            publishers: ['Doubleday'],
+            quantityAvailable: 19,
+            price: 21.99,
+            summary:
+              'A magical novel about a mysterious competition between two illusionists.',
+            averageRating: 4.7,
+            genres: ['Fiction', 'Fantasy'],
+            reviews: ['Enchanting tale!', 'Immersive and whimsical.'],
+          },
+        ] as Book[],
+        page: expect.any(Number),
+        limit: expect.any(Number),
+        totalCount: expect.any(Number),
+      };
+
+      jest.spyOn(service, 'findAll').mockImplementation(async () => {
+        throw new HttpException(
+          'Something went wrong',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
+
+      try {
+        const createdBooks = await service.findAll(
+          expect.any(Number),
+          expect.any(Number),
+        );
+        expect(createdBooks).toEqual(Promise.resolve(expectedBooks));
+      } catch (error) {
+        expect(error).toBeInstanceOf(HttpException);
+        expect(error.message).toBe('Something went wrong');
+      }
+    });
+  });
+
+  describe('Find a Book', () => {
+    it('should return a book in the database', async () => {
+      const expectedBook = {
+        id: expect.any(Number),
+        title: 'The Night Circus',
+        authors: ['Erin Morgenstern'],
+        ISBN: '978-0-385-53463-5',
+        publishers: ['Doubleday'],
+        quantityAvailable: 19,
+        price: 21.99,
+        summary:
+          'A magical novel about a mysterious competition between two illusionists.',
+        averageRating: 4.7,
+        genres: ['Fiction', 'Fantasy'],
+        reviews: ['Enchanting tale!', 'Immersive and whimsical.'],
+      } as Book;
+
+      jest.spyOn(service, 'findOne').mockImplementation(async () => {
+        throw new HttpException(
+          'Book Not Found',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
+
+      try {
+        const particularBook = await service.findOne(expect.any(Number));
+        expect(particularBook).toEqual(Promise.resolve(expectedBook));
+      } catch (error) {
+        expect(error).toBeInstanceOf(HttpException);
+        expect(error.message).toBe('Book Not Found');
       }
     });
   });
