@@ -11,6 +11,7 @@ This project is a backend API for managing books, providing endpoints for Create
   - [Installation](#installation)
 - [Project Structure](#project-structure)
 - [Configuration](#configuration)
+- [Seeeding](#seeding)
 - [Database](#database)
 - [API Endpoints](#api-endpoints)
 - [Documentation](#documentation)
@@ -57,6 +58,67 @@ The project structure follows the standard NestJS architecture, with key directo
 ## Configuration
 
 The application does not need any configuration to run
+
+## Seeding
+
+This is the python script that was used to seed the database
+```python
+import json
+from faker import Faker
+import random
+import time
+
+
+fake = Faker()
+
+genres_list = [
+    "Fiction", "Non-Fiction", "Mystery", "Thriller", "Romance",
+    "Science Fiction", "Fantasy", "Horror", "Historical Fiction", "Adventure",
+    "Biography", "Autobiography", "Memoir", "Self-Help", "Business",
+    "Philosophy", "Travel", "Poetry", "Comedy", "Drama",
+    "Satire", "Mystery", "Crime", "Detective", "Espionage",
+    "Fantasy", "Science Fiction", "Dystopian", "Cyberpunk", "Steampunk",
+    "Time Travel", "Alternate History", "Paranormal", "Urban Fantasy", "Supernatural",
+    "Horror", "Gothic", "Psychological Horror", "Historical Horror", "Mystery Thriller",
+    "Legal Thriller", "Political Thriller", "Techno-Thriller", "Psychological Thriller", "Action",
+    "Military", "War", "Spy", "Espionage", "Romance",
+    "Contemporary Romance", "Historical Romance", "Paranormal Romance", "Science Fiction Romance", "Fantasy Romance",
+    "Adventure Romance", "Time Travel Romance", "Romantic Suspense", "Chick Lit", "Women's Fiction",
+    "Science Fiction", "Hard Science Fiction", "Soft Science Fiction", "Space Opera", "Cyberpunk",
+    "Steampunk", "Dystopian", "Utopian", "Post-Apocalyptic", "Alternate History",
+    "Fantasy", "High Fantasy", "Low Fantasy", "Epic Fantasy", "Sword and Sorcery",
+    "Urban Fantasy", "Paranormal Fantasy", "Historical Fantasy", "Dark Fantasy", "Horror",
+    "Psychological Horror", "Supernatural Horror", "Gothic Horror", "Lovecraftian Horror", "Historical Horror",
+    "Mystery", "Cozy Mystery", "Hardboiled Mystery", "Police Procedural", "Crime",
+    "Detective", "Espionage", "Legal Thriller", "Political Thriller", "Techno-Thriller",
+    "Psychological Thriller", "Historical Fiction", "Historical Romance", "Historical Mystery", "Historical Fantasy"
+]
+
+
+def generate_book():
+    timestamp = int(time.time())  # Adding a timestamp to ensure uniqueness
+    return {
+        "title": fake.catch_phrase(),
+        "authors": [fake.name() for _ in range(random.randint(1, 3))],
+        "ISBN": f"978-0-{timestamp}-{random.randint(10000, 99999)}-9",
+        "publishers": [fake.company() for _ in range(random.randint(1, 2))],
+        "quantityAvailable": random.randint(5, 50),
+        "price": random.randint(1000, 999999),
+        "summary": fake.paragraph(),
+        "averageRating": round(random.uniform(3.0, 5.0), 1),
+        "genres": random.sample(genres_list, random.randint(1, 3)),
+        "reviews": [fake.sentence() for _ in range(random.randint(1, 3))]
+    }
+
+
+if __name__ == "__main__":
+    unique_books = [generate_book() for _ in range(100)]
+
+    with open("unique_books.json", "w") as file:
+        json.dump(unique_books, file, indent=2)
+
+    print("Unique books generated and saved to unique_books.json.")
+```
 
 ## Database
 
